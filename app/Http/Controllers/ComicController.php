@@ -85,7 +85,15 @@ class ComicController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'thumb' => 'required',
+            'price' => 'required|numeric',
+            'series' => 'required',
+            'sale_date' => 'required|date',
+            'type' => 'required',
+        ]);
     }
 
     /**
