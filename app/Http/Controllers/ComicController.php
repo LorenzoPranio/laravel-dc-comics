@@ -36,21 +36,12 @@ class ComicController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'thumb' => 'required',
-            'price' => 'required|numeric',
-            'series' => 'required',
-            'sale_date' => 'required|date',
-            'type' => 'required',
-        ]);
-    
+        $data = $this->validateData($request);
+        
         Comic::create($data);
-    
-        return redirect()->route('comics.index');
+        
+        return redirect()->route('comics.index')->with('success', 'Comic created successfully!');
     }
-    
 
     /**
      * Display the specified resource.
@@ -83,18 +74,17 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+     public function update(Request $request, $id)
     {
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'thumb' => 'required',
-            'price' => 'required|numeric',
-            'series' => 'required',
-            'sale_date' => 'required|date',
-            'type' => 'required',
-        ]);
+        $data = $this->validateData($request);
+        
+        $comic = Comic::findOrFail($id);
+        $comic->update($data);
+        
+        return redirect()->route('comics.show', $comic->id)->with('success', 'Comic updated successfully!');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -110,3 +100,5 @@ class ComicController extends Controller
         return redirect()->route('comics.index')->with('success', 'Comic deleted successfully!');
     }
 }
+
+
